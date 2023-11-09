@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:7500/api/v1
+
+###
+# Get all users from the Database
+GET {{baseUrl}}/user 
+Content-Type: application/json
+
+###
+
+# Test that the Plugin is working as intended
+GET https://www.google.com
