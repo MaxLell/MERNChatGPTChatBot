@@ -17,6 +17,16 @@ Content-Type: application/json
 }
 
 ###
+# Login as a user
+POST {{baseUrl}}/user/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"Hansi_Maier@SplinterCell.com",
+    "password":"Ubo12345jdjdj"
+}
+
+###
 
 # Test that the Plugin is working as intended
 GET https://www.google.com
