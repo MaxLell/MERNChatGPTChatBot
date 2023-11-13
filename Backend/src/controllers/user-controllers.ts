@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import User from '../models/User.js';
 import { compare, hash } from 'bcrypt';
+import { createToken } from '../utils/token-manager.js';
+import { COKKIE_NAME } from '../utils/constants.js';
 
 /**
  * Get all users from the Database
@@ -44,6 +46,26 @@ export const userSignup = async (
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
+    // Clear the existing cookie (if there is any already existing)
+    res.clearCookie(COKKIE_NAME, {
+      domain: 'localhost', // Needs to be fixed when another domain is to be used
+      httpOnly: true, // Cookie can not be accessed by anybody
+      signed: true, // encrypt the cookie
+      path: '/',
+    });
+
+    // Create a new cookie
+    const token = createToken(user._id.toString(), user.email, '7d');
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+    res.cookie(COKKIE_NAME, token, {
+      path: '/',
+      domain: 'localhost', // Needs to be fixed when another domain is to be used
+      expires,
+      httpOnly: true, // Cookie can not be accessed by anybody
+      signed: true, // encrypt the cookie
+    });
+
     // return the status
     console.log(user._id.toString());
     return res.status(201).json({
@@ -76,13 +98,29 @@ export const userLogin = async (
     }
 
     // verify the password of the user for authentification purposes
-    const arePasswordsMatching = await compare(
-      password,
-      user.password
-    );
-    if (arePasswordsMatching !== true) {
+    const isPasswordCorrect = await compare(password, user.password);
+    if (!isPasswordCorrect) {
       res.status(403).send('Wrong Password');
     }
+
+    // Clear the existing cookie (if there is any already existing)
+    res.clearCookie(COKKIE_NAME, {
+      domain: 'localhost', // Needs to be fixed when another domain is to be used
+      httpOnly: true, // Cookie can not be accessed by anybody
+      signed: true, // encrypt the cookie
+      path: '/',
+    });
+
+    const token = createToken(user._id.toString(), user.email, '7d');
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+    res.cookie(COKKIE_NAME, token, {
+      path: '/',
+      domain: 'localhost', // Needs to be fixed when another domain is to be used
+      expires,
+      httpOnly: true, // Cookie can not be accessed by anybody
+      signed: true, // encrypt the cookie
+    });
 
     // All right - the user has successfully jumped over all the trip wire authentification steps -> Yeah
     res.status(200).json({ message: 'Ok', id: user._id.toString() });
