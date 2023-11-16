@@ -24,6 +24,9 @@ export const getAllUsers = async (
   }
 };
 
+/**########################################################
+ *                         SIGNUP
+ ########################################################*/
 export const userSignup = async (
   req: Request,
   res: Response,
@@ -71,6 +74,8 @@ export const userSignup = async (
     return res.status(201).json({
       message: 'OK',
       id: user._id.toString(),
+      name: user.name,
+      email: user.email,
     });
   } catch (error) {
     // Handle the errors
@@ -81,6 +86,10 @@ export const userSignup = async (
   }
   console.log('userSignup');
 };
+
+/**########################################################
+ *                         Login
+ ########################################################*/
 
 export const userLogin = async (
   req: Request,
@@ -123,7 +132,12 @@ export const userLogin = async (
     });
 
     // All right - the user has successfully jumped over all the trip wire authentification steps -> Yeah
-    res.status(200).json({ message: 'Ok', id: user._id.toString() });
+    res.status(200).json({
+      message: 'Ok',
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+    });
   } catch (error) {
     console.log(error);
     return res

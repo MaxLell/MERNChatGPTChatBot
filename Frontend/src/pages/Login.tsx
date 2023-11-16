@@ -1,7 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import CustomizedInput from '../components/shared/CustomizedInput';
 import { IoIosLogIn } from 'react-icons/io';
-import { FormEvent } from 'react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
