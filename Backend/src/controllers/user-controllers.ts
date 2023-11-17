@@ -145,3 +145,38 @@ export const userLogin = async (
       .json({ message: 'tiny bugs', cause: error.message });
   }
 };
+
+/**########################################################
+ *            Check the authentification status
+ ########################################################*/
+
+export const verifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      return res
+        .status(401)
+        .send('The user is not registered here OR Token malfunction');
+    }
+
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send('Permissions did not match-');
+    }
+
+    res.status(200).json({
+      message: 'Ok',
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(418) // I am a Teapot
+      .json({ message: 'tiny bugs', cause: error.message });
+  }
+};

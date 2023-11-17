@@ -36,7 +36,6 @@ export const verifyToken = async (
           reject(error.message);
           return res.status(401).json({ message: 'Token expired' });
         } else {
-          console.log('Token verification successful');
           resolve();
           res.locals.jwtData = success;
           return next();
