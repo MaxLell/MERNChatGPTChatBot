@@ -8,8 +8,9 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import { Toaster } from 'react-hot-toast';
 
 // Axios is included to interface with the Backend
+const localhostBackendPort = 7500;
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:5000/api/v1'; // Default BackEnd Server Api
+axios.defaults.baseURL = `http://localhost:${localhostBackendPort}/api/v1`; // Default BackEnd Server Api
 axios.defaults.withCredentials = true; // helps with the exchange of cookies
 
 const theme = createTheme({

@@ -33,9 +33,10 @@ export const AuthProvider = ({
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // run this initially - check whether the user's cookies are valid
-    // skip the login
+    // Request whether the token is valid -> if not, the user does not need to login
+    // again.
   }, []);
+
   const login = async (email: string, password: string) => {
     const data = await loginUser(email, password);
     if (data) {
