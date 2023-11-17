@@ -9,12 +9,13 @@ import {
   validate,
   loginValidator,
 } from '../utils/validators.js';
+import { verifyToken } from '../utils/token-manager.js';
 
 const userRoutes = Router();
 
 userRoutes.get('/', getAllUsers);
 userRoutes.post('/signup', validate(signUpValidator), userSignup);
 userRoutes.post('/login', validate(loginValidator), userLogin);
-userRoutes.get('/auth-status', validate(loginValidator), userLogin);
+userRoutes.get('/auth-status', verifyToken, userLogin); // Verifies the token
 
 export default userRoutes;
